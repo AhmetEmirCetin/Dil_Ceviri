@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+
+namespace CeviriProjesi
+{
+    class Program
+    {
+        // Kelimeleri tutacağımız sözlük yapısı
+        // Mantık: <Türkçe Kelime, İngilizce Karşılığı>
+        static Dictionary<string, string> sozluk = new Dictionary<string, string>();
+
+        static void Main(string[] args)
+        {
+            // 1. ADIM: Sözlüğe veri ekleyelim (Veritabanı niyetine)
+            VeriYukle();
+
+            Console.Title = "Pratik Dil Çevirici v1.0";
+            
+            while (true) // Program sürekli çalışsın
+            {
+                Console.Clear();
+                Console.WriteLine("========================================");
+                Console.WriteLine("   BASİT ÇOKLU DİL ÇEVİRİSİ (TR -> ENG)");
+                Console.WriteLine("========================================");
+                Console.WriteLine("Çevirmek istediğin kelimeyi yaz (Çıkış için 'exit'):");
+                Console.Write(">> ");
+                
+                string girilenKelime = Console.ReadLine().ToLower().Trim(); // Küçük harfe çevir ve boşlukları sil
+
+                if (girilenKelime == "exit")
+                    break;
+
+                // 2. ADIM: Kelime sözlükte var mı kontrolü
+                if (sozluk.ContainsKey(girilenKelime))
+                {
+                    string cevirisi = sozluk[girilenKelime];
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n✅ Türkçe: {girilenKelime.ToUpper()} -> İngilizce: {cevirisi.ToUpper()}");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n❌ Bu kelime veritabanımızda yok!");
+                    Console.WriteLine("Eklemek ister misin? (e/h)");
+                    
+                    // Ekstra Özellik: Yeni kelime öğrenme
+                    string cevap = Console.ReadLine();
+                    if (cevap.ToLower() == "e")
+                    {
+                        Console.Write("İngilizcesini yaz: ");
+                        string yeniCeviri = Console.ReadLine();
+                        sozluk.Add(girilenKelime, yeniCeviri);
+                        Console.WriteLine("Kelime eklendi!");
+                    }
+                }
+
+                Console.ResetColor();
+                Console.WriteLine("\nDevam etmek için bir tuşa bas...");
+                Console.ReadKey();
+            }
+        }
+
+        static void VeriYukle()
+        {
+            // Örnek veriler. Burayı istediğin kadar çoğaltabilirsin.
+            sozluk.Add("merhaba", "hello");
+            sozluk.Add("araba", "car");
+            sozluk.Add("yazılım", "software");
+            sozluk.Add("bilgisayar", "computer");
+            sozluk.Add("kitap", "book");
+            sozluk.Add("okul", "school");
+            sozluk.Add("kalem", "pencil");
+            sozluk.Add("telefon", "phone");
+            sozluk.Add("kırmızı", "red");
+            sozluk.Add("mühendis", "engineer");
+        }
+    }
+}
